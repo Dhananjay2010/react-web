@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useHistory } from "react-router";
 
 let SignUp = () => {
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [confirmPassword, setConfirmPassword] = useState("");
-
+  let history = useHistory();
   return (
     <>
       <div className="row">
@@ -55,6 +56,26 @@ let SignUp = () => {
             <button
               type="submit"
               class="btn btn-primary"
+              onClick={() => {
+                if (!localStorage.getItem("users")) {
+                  localStorage.setItem("users", JSON.stringify([]));
+                }
+
+                if(password==""){
+                    return;
+                }
+
+                if (password != confirmPassword) {
+                  alert("Your password and confirm password are not same");
+                  return;
+                }
+
+                let a = JSON.parse(localStorage.getItem("users"));
+                let obj = { email, password };
+                a.push(obj);
+                localStorage.setItem("users", JSON.stringify(a));
+                history.push("/login");
+              }}
             >
               Sign Up!
             </button>
